@@ -1,20 +1,26 @@
 const sequelize = require('../config/connection');
-const { Category, Product, Tag, ProductTag } = require('../models');
+const seedCategories = require('./category-seeds');
+const seedProducts = require('./product-seeds');
+const seedTags = require('./tag-seeds');
+const seedProductTags = require('./product-tag-seeds');
 
-const categoryData = require('./categoryData.json');
-const productData = require('./productData.json');
-const tagData = require('./tagData.json');
-const productTagData = require('./productTagData.json');
-
-const seedDatabase = async () => {
+const seedAll = async () => {
   await sequelize.sync({ force: true });
+  console.log('Database synced');
 
-  await Category.bulkCreate(categoryData);
-  await Product.bulkCreate(productData);
-  await Tag.bulkCreate(tagData);
-  await ProductTag.bulkCreate(productTagData);
+  await seedCategories();
+  console.log('Categories seeded');
+
+  await seedProducts();
+  console.log('Products seeded');
+
+  await seedTags();
+  console.log('Tags seeded');
+
+  await seedProductTags();
+  console.log('Product Tags seeded');
 
   process.exit(0);
 };
 
-seedDatabase();
+seedAll();
